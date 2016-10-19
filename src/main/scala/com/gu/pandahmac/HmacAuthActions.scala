@@ -19,21 +19,33 @@ import com.gu.pandomainauth.action.{AuthActions, UserRequest}
 
 object HMACHeaderNames {
   val hmacKey = "X-Gu-Tools-HMAC-Token"
-  val dateKey  = "X-Gu-Tools-HMAC-Date"
+  val dateKey = "X-Gu-Tools-HMAC-Date"
+  // Optional header to give the emulated user a nice name, if this isn't present we default to 'hmac-authed-service'
+  val serviceNameKey = "X-Gu-Tools-Service-Name"
 }
 
 
-trait HMACAuthActions extends AuthActions {
-  val secret: String
+trait HMACAuthActions extends AuthActions with HMACHeaders {
+  private def authByKeyOrPanda[A](request: Request[A], block: RequestHandler[A]): Future[Result] = {
+    val oHmac: Option[String] = request.headers.get(HMACHeaderNames.hmacKey)
+    val oDate: Option[String] = request.headers.get(HMACHeaderNames.dateKey)
+    val oServiceName: Option[String] = request.headers.get(HMACHeaderNames.serviceNameKey)
+    val uri = new URI(request.uri)
 
-  //private def authByKey[A](request: Request[A], block: RequestHandler[A]): Future[Result] = {
-  //  val hmac: Option[String] = request.headers.get(HMACHeaderNames.hmacKey)
-  //  val date: Option[String] = request.headers.get(HMACHeaderNames.dateKey)
-  //  val uri = new URI(request.uri)
+    (oHmac, oDate) match {
+      case (Some(hmac), Some(date)) => {
+        if (validateHMACHeaders(date, hmac, uri)) {
+          val user = User(oServiceName.getOrElse("hmac-authed-service"), "", "", None)
+          block(new UserRequest(user, request))
+        } else {
+          Future.successful(Unauthorized)
+        }
+      }
+      case _ => authByPanda(request, block)
+    }
 
-  //  //hmacService.validateHMACHeaders(date, token, uri)
+  }
 
-  //}
   type RequestHandler[A] = UserRequest[A] => Future[Result]
 
   def authByPanda[A](request: Request[A], block: RequestHandler[A]): Future[Result] =
@@ -44,12 +56,12 @@ trait HMACAuthActions extends AuthActions {
   object HMACAuthAction extends ActionBuilder[UserRequest] {
     override def invokeBlock[A](request: Request[A], block: RequestHandler[A]): Future[Result] = {
       // do hmac stuff then do panda stuff by calling AuthAction.invokeBlock
-      authByPanda(request, block)
+      authByKeyOrPanda(request, block)
     }
   }
 
   object APIHMACAuthAction extends ActionBuilder[UserRequest] {
     override def invokeBlock[A](request: Request[A], block: RequestHandler[A]): Future[Result] =
-      authByPanda(request, block)
-    }
+      authByKeyOrPanda(request, block)
+  }
 }

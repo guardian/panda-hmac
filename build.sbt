@@ -1,6 +1,5 @@
 name := "panda-hmac"
-
-version := "1.0"
+organization := "com.gu"
 
 scalaVersion := "2.11.8"
 
