@@ -23,12 +23,12 @@ const token = makeHMACToken(sharedSecret, date, uri);
 
 // Make a request to our example API with the generated HMAC
 reqwest({
-    url: "example.com" + uri,
+    url: "http://example.com" + uri,
     method: 'GET',
     headers: {
-        X-Gu-Tools-HMAC-Date: date,
-        X-Gu-Tools-HMAC-Token: token,
-        X-Gu-Tools-Service-Name: 'example-service-name'
+        'X-Gu-Tools-HMAC-Date': date,
+        'X-Gu-Tools-HMAC-Token': token,
+        'X-Gu-Tools-Service-Name': 'example-service-name'
     }
 }).then(function(resp) {
     console.log('We did it!');
