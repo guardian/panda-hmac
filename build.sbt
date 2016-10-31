@@ -10,7 +10,7 @@ scalacOptions ++= Seq("-feature", "-deprecation")
 libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play" % "2.4.0" % "provided",
   "com.typesafe.play" %% "play-ws" % "2.4.0" % "provided",
-  "com.gu" %% "hmac-headers" % "1.0",
+  "com.gu" %% "hmac-headers" % "1.1",
   "com.gu" %% "pan-domain-auth-play_2-5" % "0.3.0"
   )
 
