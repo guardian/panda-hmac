@@ -26,7 +26,7 @@ object HMACHeaderNames {
 
 
 trait HMACAuthActions extends AuthActions with HMACHeaders {
-  private def authByKeyOrPanda[A](request: Request[A], block: RequestHandler[A]): Future[Result] = {
+  private def authByKeyOrPanda[A](request: Request[A], block: RequestHandler[A], useApiAuth: Boolean): Future[Result] = {
     val oHmac: Option[String] = request.headers.get(HMACHeaderNames.hmacKey)
     val oDate: Option[String] = request.headers.get(HMACHeaderNames.dateKey)
     val oServiceName: Option[String] = request.headers.get(HMACHeaderNames.serviceNameKey)
@@ -41,7 +41,7 @@ trait HMACAuthActions extends AuthActions with HMACHeaders {
           Future.successful(Unauthorized)
         }
       }
-      case _ => authByPanda(request, block)
+      case _ => if(useApiAuth) apiAuthByPanda(request, block) else authByPanda(request, block)
     }
 
   }
@@ -53,15 +53,19 @@ trait HMACAuthActions extends AuthActions with HMACHeaders {
       block(new UserRequest(request.user, request))
     })
 
+  def apiAuthByPanda[A](request: Request[A], block: RequestHandler[A]): Future[Result] =
+    APIAuthAction.invokeBlock(request, (request: UserRequest[A]) => {
+      block(new UserRequest(request.user, request))
+    })
+
   object HMACAuthAction extends ActionBuilder[UserRequest] {
     override def invokeBlock[A](request: Request[A], block: RequestHandler[A]): Future[Result] = {
-      // do hmac stuff then do panda stuff by calling AuthAction.invokeBlock
-      authByKeyOrPanda(request, block)
+      authByKeyOrPanda(request, block, useApiAuth = false)
     }
   }
 
   object APIHMACAuthAction extends ActionBuilder[UserRequest] {
     override def invokeBlock[A](request: Request[A], block: RequestHandler[A]): Future[Result] =
-      authByKeyOrPanda(request, block)
+      authByKeyOrPanda(request, block, useApiAuth = true)
   }
 }
