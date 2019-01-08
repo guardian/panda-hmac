@@ -1,12 +1,14 @@
 package com.gu.pandahmac
 import com.gu.hmac.HMACHeaders
 import java.net.URI
+
 import scala.concurrent.{ExecutionContext, Future}
 import play.api.mvc._
 import play.api.mvc.Results._
 import com.gu.pandomainauth.model.{AuthenticatedUser, User}
 import com.gu.pandomainauth.action.{AuthActions, UserRequest}
 import javax.inject.Inject
+import play.api.libs.ws.WSClient
 
 
 object HMACHeaderNames {
@@ -18,6 +20,15 @@ object HMACHeaderNames {
 
 
 trait HMACAuthActions extends AuthActions with HMACHeaders {
+  /**
+    * Play application
+    * Play application components that you must provide in order to use AuthActions
+    */
+  def wsClient: WSClient
+  def controllerComponents: ControllerComponents
+
+  private implicit val ec: ExecutionContext = controllerComponents.executionContext
+
   private def authByKeyOrPanda[A](request: Request[A], block: RequestHandler[A], useApiAuth: Boolean): Future[Result] = {
     val oHmac: Option[String] = request.headers.get(HMACHeaderNames.hmacKey)
     val oDate: Option[String] = request.headers.get(HMACHeaderNames.dateKey)
@@ -50,14 +61,22 @@ trait HMACAuthActions extends AuthActions with HMACHeaders {
       block(new UserRequest(request.user, request))
     })
 
+
   /* as per https://www.playframework.com/documentation/2.6.x/ScalaActionsComposition */
-  class HMACAuthAction @Inject() (override val parser:BodyParsers.Default)(override implicit val executionContext: ExecutionContext) extends ActionBuilder[UserRequest, AnyContent] {
+  object HMACAuthAction extends ActionBuilder[UserRequest, AnyContent] {
+    override def parser: BodyParser[AnyContent] = HMACAuthActions.this.controllerComponents.parsers.default
+    override protected def executionContext: ExecutionContext = HMACAuthActions.this.controllerComponents.executionContext
+
     override def invokeBlock[A](request: Request[A], block: RequestHandler[A]): Future[Result] = {
       authByKeyOrPanda(request, block, useApiAuth = false)
     }
   }
 
-  class APIHMACAuthAction @Inject() (override val parser:BodyParsers.Default)(override implicit val executionContext: ExecutionContext) extends ActionBuilder[UserRequest, AnyContent] {
+
+  object APIHMACAuthAction extends ActionBuilder[UserRequest, AnyContent] {
+    override def parser: BodyParser[AnyContent] = HMACAuthActions.this.controllerComponents.parsers.default
+    override protected def executionContext: ExecutionContext = HMACAuthActions.this.controllerComponents.executionContext
+
     override def invokeBlock[A](request: Request[A], block: RequestHandler[A]): Future[Result] =
       authByKeyOrPanda(request, block, useApiAuth = true)
   }
