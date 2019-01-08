@@ -17,8 +17,9 @@ lazy val root = (project in file("."))
     publish / skip := false
   )
 
-lazy val `play26project` = (project in file(".")).settings(
+lazy val `play26project` = (project in file("play2-6")).settings(
   crossScalaVersions := scalaVersions,
+  name := "panda-hmac-play_2-6",
   libraryDependencies ++= Seq(
     "com.typesafe.play" %% "play" % "2.6.0" % "provided",
     "com.typesafe.play" %% "play-ws" % "2.6.0" % "provided",
@@ -27,8 +28,9 @@ lazy val `play26project` = (project in file(".")).settings(
   )
 )
 
-lazy val `play25project` = (project in file(".")).settings(
+lazy val `play25project` = (project in file("play2-5")).settings(
   crossScalaVersions := List(scala211ver),
+  name := "panda-hmac-play_2-5",
   crossPaths := true,
   autoScalaLibrary := false,
   libraryDependencies ++= Seq(
