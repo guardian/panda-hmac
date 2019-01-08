@@ -14,7 +14,14 @@ lazy val root = (project in file("."))
   .settings(
     // crossScalaVersions must be set to Nil on the aggregating project
     crossScalaVersions := Nil,
-    publish / skip := false
+    publish / skip := false,
+    // Add sonatype repository settings
+    publishTo := Some(
+      if (isSnapshot.value)
+        Opts.resolver.sonatypeSnapshots
+      else
+        Opts.resolver.sonatypeStaging
+    )
   )
 
 lazy val `play26project` = (project in file("play2-6")).settings(
@@ -26,6 +33,13 @@ lazy val `play26project` = (project in file("play2-6")).settings(
     "com.typesafe.play" %% "play-ws" % "2.6.0" % "provided",
     "com.gu" %% "hmac-headers" % "1.1.2",
     "com.gu" %% "pan-domain-auth-play_2-6" % "0.7.2"
+  ),
+  // Add sonatype repository settings
+  publishTo := Some(
+    if (isSnapshot.value)
+      Opts.resolver.sonatypeSnapshots
+    else
+      Opts.resolver.sonatypeStaging
   )
 )
 
@@ -40,10 +54,18 @@ lazy val `play25project` = (project in file("play2-5")).settings(
     "com.typesafe.play" % "play-ws_2.11" % "2.4.0",
     "com.gu" %% "hmac-headers" % "1.1.2",
     "com.gu" % "pan-domain-auth-play_2-5_2.11" % "0.5.1"
+  ),
+  // Add sonatype repository settings
+  publishTo := Some(
+    if (isSnapshot.value)
+      Opts.resolver.sonatypeSnapshots
+    else
+      Opts.resolver.sonatypeStaging
   )
 )
 
+homepage := Some(url("https://github.com/guardian/panda-hmac"))
+scmInfo := Some(ScmInfo(url("https://github.com/guardian/panda-hmac"),"git@github.com:guardian/panda-hmac.git"))
 publishMavenStyle := true
-bintrayOrganization := Some("guardian")
-bintrayRepository := "editorial-tools"
+
 licenses += ("Apache-2.0", url("https://github.com/guardian/tags-thrift-schema/blob/master/LICENSE"))
