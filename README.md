@@ -10,12 +10,12 @@ We use HMAC-SHA-256
 Assuming that you are using `pan-domain-auth-play` and have already set up `pan-domain-auth` 
 (see the instructions on those repos for details on how to do this), then it should be as simple as:
 
-####build.sbt
+#### build.sbt
 ```
 libraryDependencies += "com.gu" %% "panda-hmac-play_2.6" % "1.3.1"
 ```
 
-####controller
+#### controller
 ```
 import com.gu.pandahmac.HMACAuthActions
 .
