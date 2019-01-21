@@ -1,3 +1,5 @@
+import sbt.Keys.{publishMavenStyle, scmInfo}
+
 name := "panda-hmac"
 organization := "com.gu"
 
@@ -40,7 +42,20 @@ lazy val `play26project` = (project in file("play2-6")).settings(
       Opts.resolver.sonatypeSnapshots
     else
       Opts.resolver.sonatypeStaging
-  )
+  ),
+  homepage := Some(url("https://github.com/guardian/panda-hmac")),
+  scmInfo := Some(ScmInfo(url("https://github.com/guardian/panda-hmac"),"git@github.com:guardian/panda-hmac.git")),
+  publishMavenStyle := true,
+  developers := List(
+    Developer(
+      id    = "GuardianEdTools",
+      name  = "guardian editorial tools",
+      email = "digitalcms.dev@theguardian.com",
+      url   = url("https://www.theguardian.com")
+    )
+  ),
+  licenses += ("Apache-2.0", url("https://github.com/guardian/tags-thrift-schema/blob/master/LICENSE")),
+  publishConfiguration := publishConfiguration.value.withOverwrite(true)
 )
 
 lazy val `play25project` = (project in file("play2-5")).settings(
@@ -61,11 +76,18 @@ lazy val `play25project` = (project in file("play2-5")).settings(
       Opts.resolver.sonatypeSnapshots
     else
       Opts.resolver.sonatypeStaging
-  )
+  ),
+  homepage := Some(url("https://github.com/guardian/panda-hmac")),
+  scmInfo := Some(ScmInfo(url("https://github.com/guardian/panda-hmac"),"git@github.com:guardian/panda-hmac.git")),
+  developers := List(
+    Developer(
+      id    = "GuardianEdTools",
+      name  = "guardian editorial tools",
+      email = "digitalcms.dev@theguardian.com",
+      url   = url("https://www.theguardian.com")
+    )
+  ),
+  publishMavenStyle := true,
+  licenses += ("Apache-2.0", url("https://github.com/guardian/tags-thrift-schema/blob/master/LICENSE")),
+  publishConfiguration := publishConfiguration.value.withOverwrite(true)
 )
-
-homepage := Some(url("https://github.com/guardian/panda-hmac"))
-scmInfo := Some(ScmInfo(url("https://github.com/guardian/panda-hmac"),"git@github.com:guardian/panda-hmac.git"))
-publishMavenStyle := true
-
-licenses += ("Apache-2.0", url("https://github.com/guardian/tags-thrift-schema/blob/master/LICENSE"))
