@@ -1,14 +1,13 @@
 package com.gu.pandahmac
 import com.gu.hmac.HMACHeaders
-import java.net.URI
-
-import scala.concurrent.{ExecutionContext, Future}
-import play.api.mvc._
-import play.api.mvc.Results._
-import com.gu.pandomainauth.model.{AuthenticatedUser, User}
 import com.gu.pandomainauth.action.{AuthActions, UserRequest}
-import javax.inject.Inject
+import com.gu.pandomainauth.model.User
 import play.api.libs.ws.WSClient
+import play.api.mvc.Results._
+import play.api.mvc._
+
+import java.net.URI
+import scala.concurrent.{ExecutionContext, Future}
 
 
 object HMACHeaderNames {

@@ -12,7 +12,7 @@ Assuming that you are using `pan-domain-auth-play` and have already set up `pan-
 
 #### build.sbt
 ```
-libraryDependencies += "com.gu" %% "panda-hmac-play_2.6" % "1.3.1"
+libraryDependencies += "com.gu" %% "panda-hmac-play_2.8" % "2.0.0"
 ```
 
 #### controller
