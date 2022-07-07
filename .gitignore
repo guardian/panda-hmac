@@ -61,3 +61,4 @@ sbt-output.txt
 node_modules/
 public/build
 application.local.conf
+.bsp
