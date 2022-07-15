@@ -79,6 +79,7 @@ lazy val `play27project` = (project in file("play")).settings(commonSettings).se
 
 lazy val root = (project in file("."))
   .aggregate(play28project, play27project)
+  .settings(commonSettings)
   .settings(
     publishArtifact := false,
     publish / skip := true,
