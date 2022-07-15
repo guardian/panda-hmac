@@ -1,6 +1,7 @@
 import sbt.Keys.{publishMavenStyle, scmInfo}
 import sbt.url
 import ReleaseTransformations._
+import xerial.sbt.Sonatype._
 
 name := "panda-hmac"
 organization := "com.gu"
@@ -12,7 +13,7 @@ ThisBuild / description := "Wraps the panda play library to allow either panda c
 
 scalacOptions ++= Seq("-feature", "-deprecation")
 
-lazy val commonSettings = Seq(
+lazy val commonSettings = sonatypeSettings ++ Seq(
   organization := "com.gu",
   scalaVersion := scala212ver,
   // Add sonatype repository settings
