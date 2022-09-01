@@ -60,7 +60,7 @@ lazy val `play28project` = (project in file("play")).settings(commonSettings).se
     "com.typesafe.play" %% "play" % "2.8.11" % "provided",
     "com.typesafe.play" %% "play-ws" % "2.8.11" % "provided",
     "com.gu" %% "hmac-headers" % "1.2.0",
-    "com.gu" %% "pan-domain-auth-play_2-8" % "1.0.6"
+    "com.gu" %% "pan-domain-auth-play_2-8" % "1.2.0"
   ),
 )
 
@@ -73,7 +73,7 @@ lazy val `play27project` = (project in file("play")).settings(commonSettings).se
     "com.typesafe.play" %% "play" % "2.7.0" % "provided",
     "com.typesafe.play" %% "play-ws" % "2.7.0" % "provided",
     "com.gu" %% "hmac-headers" % "1.2.0",
-    "com.gu" %% "pan-domain-auth-play_2-7" % "1.0.6"
+    "com.gu" %% "pan-domain-auth-play_2-7" % "1.2.0"
   ),
 )
 
