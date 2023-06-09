@@ -73,7 +73,7 @@ lazy val `play27project` = (project in file("play")).settings(commonSettings).se
   libraryDependencies ++= Seq(
     "com.typesafe.play" %% "play" % "2.7.0" % "provided",
     "com.typesafe.play" %% "play-ws" % "2.7.0" % "provided",
-    "com.gu" %% "hmac-headers" % "2.0.0-SNAPSHOT",
+    "com.gu" %% "hmac-headers" % "2.0.0",
     "com.gu" %% "pan-domain-auth-play_2-7" % "1.2.0",
     "org.scalatest" %% "scalatest" % "3.2.10" % "test"
   ),
