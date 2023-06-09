@@ -45,6 +45,16 @@ class HMACHeadersTest extends AnyWordSpec with Matchers {
 
         hmacSecrets.validateHMACHeaders(dateHeaderValue, s"HMAC $expectedHMAC", uri) should be(true)
       }
+
+      "preferentially use secretKeys over secret if both are provided" in {
+        val hmacSecrets = new HMACSecrets {
+          override val secret = "invalid"
+          override val secretKeys = List("invalid", validSecret, "invalid")
+          override val clock: Clock = fixedClock
+        }
+
+        hmacSecrets.validateHMACHeaders(dateHeaderValue, s"HMAC $expectedHMAC", uri) should be(true)
+      }
     }
   }
 }

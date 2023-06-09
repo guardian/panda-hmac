@@ -9,20 +9,13 @@ trait HMACSecrets extends ValidateHMACHeader {
   def secret: String = ""
   def secretKeys: List[String] = List.empty
 
-  protected def gatherSecrets = {
-    val gatheredSecrets = (secret, secretKeys) match {
-      case ("", emptyList) if emptyList.isEmpty => List.empty
-      case (nonEmptySecret, _) if !nonEmptySecret.isEmpty => List(nonEmptySecret)
-      case ("", nonEmptyList) => nonEmptyList
-    }
-
-    if (gatheredSecrets.isEmpty) {
-      throw new Exception("Please set either 'secret' or 'secretKeys', no secret available for HMACAuthActions!")
-    }
-
-    gatheredSecrets
-  }
-
+  protected def gatherSecrets: List[String] =
+    if(!secretKeys.isEmpty) secretKeys
+    else if(!secret.isEmpty) List(secret)
+    else throw new Exception(
+      "Please set either 'secret' or 'secretKeys', no secret available for HMACAuthActions!"
+    )
+  
   def validateHMACHeaders(date: String, hmac: String, uri: URI): Boolean =
     gatherSecrets.exists(validateHMACHeadersWithSecret(_, date, hmac, uri))
 }
