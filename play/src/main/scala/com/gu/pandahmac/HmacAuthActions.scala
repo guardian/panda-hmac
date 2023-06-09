@@ -1,7 +1,8 @@
 package com.gu.pandahmac
-import com.gu.hmac.HMACHeaders
+import com.gu.hmac.{HMACHeaders, ValidateHMACHeader}
 import com.gu.pandomainauth.action.{AuthActions, UserRequest}
 import com.gu.pandomainauth.model.User
+import org.slf4j.LoggerFactory
 import play.api.libs.ws.WSClient
 import play.api.mvc.Results._
 import play.api.mvc._
@@ -17,8 +18,7 @@ object HMACHeaderNames {
   val serviceNameKey = "X-Gu-Tools-Service-Name"
 }
 
-
-trait HMACAuthActions extends AuthActions with HMACHeaders {
+trait HMACAuthActions extends AuthActions with HMACSecrets {
   /**
     * Play application
     * Play application components that you must provide in order to use AuthActions
@@ -45,7 +45,6 @@ trait HMACAuthActions extends AuthActions with HMACHeaders {
       }
       case _ => if(useApiAuth) apiAuthByPanda(request, block) else authByPanda(request, block)
     }
-
   }
 
   type RequestHandler[A] = UserRequest[A] => Future[Result]
