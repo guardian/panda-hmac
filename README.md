@@ -1,5 +1,5 @@
 > [!WARNING]  
-> The panda-hmac modules have been moved to guardian/pan-domain-authentication. This repo is now out of date.
+> The panda-hmac modules have been moved to [guardian/pan-domain-authentication](https://github.com/guardian/pan-domain-authentication). This repo is now out of date.
 
 # Play HMAC
 
