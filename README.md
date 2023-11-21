@@ -1,3 +1,6 @@
+> [!WARNING]  
+> The panda-hmac modules have been moved to [guardian/pan-domain-authentication](https://github.com/guardian/pan-domain-authentication). This repo is now out of date.
+
 # Play HMAC
 
 Some useful `AuthActions` for working with machine/user auth based of HMAC for the robots and cookies for the monkeys.
